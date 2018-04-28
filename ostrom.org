@@ -1,1 +1,75 @@
 #+TITLE: Ostrom
+
+* Preliminaries.
+
+Mostly developed over a remote connection. Using CCL 'cuz that's what Babel2
+supports at the moment. Roswell provides a convenient way to get a
+Quicklisp-enabled persistent REPL running. Anyway once Lisp is running with
+Quicklisp I do something like:
+
+#+BEGIN_SRC lisp
+  (ql:quickload "swank")
+  (swank:create-server :dont-close t)
+#+END_SRC
+
+SSH tunnel gets created like:
+
+#+BEGIN_SRC sh
+  ssh -L 4005:localhost:4005 me@my.site
+#+END_SRC
+
+Then `M-x slime-connect` and you're hacking!
+
+* Package setup.
+
+Qlot is awesome.
+
+#+BEGIN_SRC lisp
+  (ql:quickload "qlot")
+#+END_SRC
+
+#+BEGIN_SRC fundamental
+  ql hunchentoot :latest
+#+END_SRC
+
+Pending figuring out a way to get Qlot working effectively across a remote
+connection, Hunchentoot is in Quicklisp anyway!
+
+#+BEGIN_SRC lisp
+  (ql:quickload "hunchentoot")
+#+END_SRC
+
+CL-WHO for HTML gen (I've even tried to contribute to it!).
+
+#+BEGIN_SRC lisp
+  (ql:quickload "cl-who")
+#+END_SRC
+
+And Parenscript for JS gen.
+
+#+BEGIN_SRC lisp
+  (ql:quickload "parenscript")
+#+END_SRC
+
+* Creating a website.
+
+Hunchentoot's easy handlers may be easy and dumb but the easy part is really
+nice.
+
+#+BEGIN_SRC lisp
+  (hunchentoot:define-easy-handler (home :uri "/") ()
+    (setf (hunchentoot:content-type*) "text/plain")
+    (format nil "Welcome to an Ostrom rules thing!"))
+
+  (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor
+                                    :port 8000
+                                    :document-root "."))
+#+END_SRC
+
+Oh and to access the site from the outside you'll need to bind the Hunchentoot
+port to the outside somehow. On my DigitalOcean droplet I do this as root,
+YMMV:
+
+#+BEGIN_SRC sh
+  iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
+#+END_SRC
