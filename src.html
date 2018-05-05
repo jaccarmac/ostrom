@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-04-28 Sat 15:56 -->
+<!-- 2018-05-05 Sat 11:14 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ostrom</title>
@@ -247,15 +247,15 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb35434a">1. Preliminaries.</a></li>
-<li><a href="#org17cd176">2. Package setup.</a></li>
-<li><a href="#orgd4e89ef">3. Creating a website.</a></li>
+<li><a href="#orgd17175c">1. Preliminaries.</a></li>
+<li><a href="#org6782355">2. Package setup.</a></li>
+<li><a href="#org1213ed2">3. Creating a website.</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgb35434a" class="outline-2">
-<h2 id="orgb35434a"><span class="section-number-2">1</span> Preliminaries.</h2>
+<div id="outline-container-orgd17175c" class="outline-2">
+<h2 id="orgd17175c"><span class="section-number-2">1</span> Preliminaries.</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Mostly developed over a remote connection. Using CCL 'cuz that's what Babel2
@@ -285,8 +285,8 @@ Then `M-x slime-connect` and you're hacking!
 </div>
 </div>
 
-<div id="outline-container-org17cd176" class="outline-2">
-<h2 id="org17cd176"><span class="section-number-2">2</span> Package setup.</h2>
+<div id="outline-container-org6782355" class="outline-2">
+<h2 id="org6782355"><span class="section-number-2">2</span> Package setup.</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Qlot is awesome.
@@ -332,8 +332,8 @@ And Parenscript for JS gen.
 </div>
 </div>
 
-<div id="outline-container-orgd4e89ef" class="outline-2">
-<h2 id="orgd4e89ef"><span class="section-number-2">3</span> Creating a website.</h2>
+<div id="outline-container-org1213ed2" class="outline-2">
+<h2 id="org1213ed2"><span class="section-number-2">3</span> Creating a website.</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Hunchentoot's easy handlers may be easy and dumb but the easy part is really
@@ -353,12 +353,22 @@ nice.
 
 <p>
 Oh and to access the site from the outside you'll need to bind the Hunchentoot
-port to the outside somehow. On my DigitalOcean droplet I do this as root,
-YMMV:
+port to the outside somehow. On my DigitalOcean droplet I do this with NGINX. I
+also forward <code>/src/</code> to the Fossil server (which I start with <code>fossil server
+--baseurl http://my.site/src</code>).
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
+<pre class="src src-conf"><span style="color: #b2baf6;">server</span> {
+        listen 80 default_server;
+        server_name my.site;
+        <span style="color: #b2baf6;">location /</span> {
+                proxy_pass http://127.0.0.1:8000;
+        }
+        <span style="color: #b2baf6;">location /src/</span> {
+                proxy_pass http://127.0.0.1:8080/;
+        }
+}
 </pre>
 </div>
 </div>
@@ -366,7 +376,7 @@ YMMV:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jacob MacDonald</p>
-<p class="date">Created: 2018-04-28 Sat 15:56</p>
+<p class="date">Created: 2018-05-05 Sat 11:14</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
