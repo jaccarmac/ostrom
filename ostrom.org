@@ -85,3 +85,22 @@ also forward =/src/= to the Fossil server (which I start with =fossil server
           }
   }
 #+END_SRC
+
+* Babel2 setup.
+
+  #+begin_src sh
+    git clone https://github.com/EvolutionaryLinguisticsAssociation/Babel2
+  #+end_src
+
+  Disable the web interface since we have a custom one.
+
+  #+begin_src lisp
+    (defparameter *automatically-start-web-interface* nil)
+  #+end_src
+
+  Then we can actually load the system. TODO fix the hardcoding found here.
+
+  #+begin_src lisp
+    (load "../Babel2/init-babel")
+    (ql:quickload "irl")
+  #+end_src
