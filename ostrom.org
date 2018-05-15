@@ -61,7 +61,9 @@ nice.
     (cl-who:with-html-output-to-string (*standard-output*)
       (:html
        (:head (:title "Ostrom"))
-       (:body (:h1 "Ostrom") (:p "Welcome to a rules thing!")))))
+       (:body (:h1 "Ostrom")
+              (:p "The quick brown fox jumps over the lazy dog.")
+              (:p (format nil "~a" (nlp-tools:get-penelope-pos-tags "The quick brown fox jumps over the lazy dog.")))))))
 
   (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor
                                     :port 8000
@@ -98,9 +100,32 @@ also forward =/src/= to the Fossil server (which I start with =fossil server
     (defparameter *automatically-start-web-interface* nil)
   #+end_src
 
-  Then we can actually load the system. TODO fix the hardcoding found here.
+  Then we can actually load the system. TODO fix the hardcoding found
+  here. TODO figure out how to keep the server from nuking my easy-handlers.
 
   #+begin_src lisp
     (load "../Babel2/init-babel")
     (ql:quickload "irl")
   #+end_src
+
+  There is a =nlp-tools= package that lets us do things like this.
+
+  #+begin_src lisp
+    (ql:quickload "nlp-tools")
+    (nlp-tools:get-penelope-tokens "I don't like homework")
+  #+end_src
+
+  Even better it has some parts of speech tagging built in.
+
+  #+begin_src lisp
+    (nlp-tools:get-penelope-pos-tags "The user must do thing 1 and thing 2")
+  #+end_src
+
+  Granted it's a web API but let's get a nice little API of our own setup.
+
+** POS tagger endpoint.
+
+   #+begin_src lisp
+     (hunchentoot:define-easy-handler (pos-tagger :uri "/get-nouns") (utterance)
+       (format t "~a" (nlp-tools:get-penelope-pos-tags utterance)))
+   #+end_src
