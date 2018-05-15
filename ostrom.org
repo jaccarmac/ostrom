@@ -58,8 +58,10 @@ nice.
 
 #+BEGIN_SRC lisp
   (hunchentoot:define-easy-handler (home :uri "/") ()
-    (setf (hunchentoot:content-type*) "text/plain")
-    (format nil "Welcome to an Ostrom rules thing!"))
+    (cl-who:with-html-output-to-string (*standard-output*)
+      (:html
+       (:head (:title "Ostrom"))
+       (:body (:h1 "Ostrom") (:p "Welcome to a rules thing!")))))
 
   (hunchentoot:start (make-instance 'hunchentoot:easy-acceptor
                                     :port 8000
