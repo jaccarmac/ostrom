@@ -1,5 +1,7 @@
 #+TITLE: Ostrom
 
+TODO https://mr.gy/blog/lisp-vendoring-quicklisp-nix.html
+
 * Preliminaries.
 
 Mostly developed over a remote connection. Using CCL 'cuz that's what Babel2
