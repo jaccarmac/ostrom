@@ -3,6 +3,7 @@
 TODO https://mr.gy/blog/lisp-vendoring-quicklisp-nix.html
 TODO check out the duckling lib for Clojure: https://duckling.wit.ai/
 TODO URLs have changed, check https://emergent-languages.org/
+TODO https://github.com/vindarel/lisp-web-live-reload-example
 
 * Preliminaries.
 
